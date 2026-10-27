@@ -1,214 +1,281 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AquaSmart - Riego Automático Escolar</title>
-    <!-- Tailwind CSS -->
+    <title>Aqua Smart | Sistema de Riego Automático en Palets</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome icons -->
+    <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        aqua: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            700: '#0f766e',
-                        },
-                        eco: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                        }
-                    },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        ecoGreen: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        },
+                        ecoBlue: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    },
+                    keyframes: {
+                        drip: {
+                            '0%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+                            '100%': { transform: 'translateY(50px) scale(0.3)', opacity: '0' }
+                        }
+                    },
+                    animation: {
+                        drip: 'drip 1.2s infinite ease-in'
                     }
                 }
             }
         }
     </script>
     <style>
-        .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        .soil-wet {
+            background-color: #3b2314 !important;
+            transition: background-color 0.8s ease;
+        }
+        .soil-dry {
+            background-color: #7c522d !important;
+            transition: background-color 0.8s ease;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
 
-    <!-- 1. HEADER / NAVBAR -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md">
-                        <i class="fa-solid fa-droplet text-xl"></i>
-                    </div>
-                    <span class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">AquaSmart</span>
+    <!-- Header / Nav -->
+    <header class="sticky top-0 z-40 w-full glass-header border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-ecoGreen-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-droplet text-2xl"></i>
                 </div>
-                <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
-                    <a href="#inicio" class="hover:text-emerald-600 transition">Inicio</a>
-                    <a href="#beneficios" class="hover:text-emerald-600 transition">Beneficios</a>
-                    <a href="#dashboard" class="hover:text-emerald-600 transition">Panel de Control</a>
-                    <a href="#como-funciona" class="hover:text-emerald-600 transition">Kit de Riego</a>
+                <div>
+                    <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
+                        Aqua<span class="text-ecoGreen-600">Smart</span>
+                    </span>
+                    <span class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Proyecto Escolar de Riego Automático</span>
                 </div>
-                <a href="#dashboard" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg transition shadow-sm text-sm">
-                    Ver Panel <i class="fa-solid fa-arrow-right ml-1"></i>
-                </a>
             </div>
-        </div>
-    </nav>
 
-    <!-- 2. HERO SECTION -->
-    <section id="inicio" class="relative pt-12 pb-16 overflow-hidden bg-gradient-to-b from-emerald-50 via-teal-50/30 to-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 bg-emerald-100/80 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-full">
-                        <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span>Proyecto Didáctico para Huerta Escolar</span>
+            <!-- Menú Desktop -->
+            <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                <a href="#contexto" class="hover:text-ecoGreen-600 transition-colors">Contexto & Problema</a>
+                <a href="#objetivos" class="hover:text-ecoGreen-600 transition-colors">Objetivos</a>
+                <a href="#simulador" class="hover:text-ecoGreen-600 transition-colors">Simulador</a>
+                <a href="#viabilidad" class="hover:text-ecoGreen-600 transition-colors">Presupuesto & Seguridad</a>
+                <a href="#bitacora" class="hover:text-ecoGreen-600 transition-colors">Bitácora</a>
+                <a href="#equipo" class="hover:text-ecoGreen-600 transition-colors">Equipo</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Menú Móvil -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-2 text-xs font-semibold uppercase">
+            <a href="#contexto" class="block py-2 text-slate-600 hover:text-ecoGreen-600">Contexto & Problema</a>
+            <a href="#objetivos" class="block py-2 text-slate-600 hover:text-ecoGreen-600">Objetivos</a>
+            <a href="#simulador" class="block py-2 text-slate-600 hover:text-ecoGreen-600">Simulador</a>
+            <a href="#viabilidad" class="block py-2 text-slate-600 hover:text-ecoGreen-600">Presupuesto & Seguridad</a>
+            <a href="#bitacora" class="block py-2 text-slate-600 hover:text-ecoGreen-600">Bitácora</a>
+            <a href="#equipo" class="block py-2 text-slate-600 hover:text-ecoGreen-600">Equipo</a>
+        </div>
+    </header>
+
+    <!-- HERO / BANNER INSTITUCIONAL -->
+    <section class="relative py-12 md:py-20 bg-gradient-to-b from-ecoGreen-50/70 via-white to-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecoBlue-100 text-ecoBlue-700 text-xs font-bold border border-ecoBlue-200">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <span>Proyecto Educativo Técnico & Promoción Ambiental</span>
                     </div>
-                    <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
-                        AquaSmart: <span class="text-emerald-600">Riego Automático</span> para la Huerta Escolar
+
+                    <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        Aqua Smart: <span class="text-ecoGreen-600">Riego Automático</span> sobre Palets
                     </h1>
-                    <p class="text-lg text-slate-600 leading-relaxed">
-                        Una solución automatizada pensada para cuidar los cultivos del colegio, fomentar la conciencia ecológica y conectar la ciencia con la tecnología práctica en el aula.
+
+                    <p class="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
+                        Un prototipo diseñado por estudiantes para automatizar e hidratar la huerta escolar durante recesos y fines de semana, combinando tecnología de bajo costo con el reciclaje de maderas.
                     </p>
-                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#beneficios" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg hover:shadow-emerald-500/20 transition flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-seedling"></i>
-                            <span>Ver Beneficios</span>
+
+                    <!-- Ficha Institucional -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-xs text-slate-600 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-school text-ecoGreen-600 text-base"></i>
+                            <div>
+                                <span class="block font-bold text-slate-900">Institución Educativa:</span>
+                                <span>CEDMR Miguela Rodríguez Araujo</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-microchip text-ecoBlue-600 text-base"></i>
+                            <div>
+                                <span class="block font-bold text-slate-900">Enfoque del Proyecto:</span>
+                                <span>Automatización & Agroecología</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+                        <a href="#simulador" class="w-full sm:w-auto px-6 py-3 text-sm font-bold text-white bg-ecoGreen-600 hover:bg-ecoGreen-700 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> Probar Simulador Didáctico
                         </a>
-                        <a href="#dashboard" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold px-6 py-3.5 rounded-xl transition flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-gauge-high text-emerald-600"></i>
-                            <span>Probar Simulador</span>
+                        <a href="#contexto" class="w-full sm:w-auto px-6 py-3 text-sm font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Ver Caso de la Huerta
                         </a>
                     </div>
                 </div>
-                <div class="relative">
-                    <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 relative z-10">
-                        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=800&q=80" alt="Huerta Escolar" class="rounded-2xl w-full h-80 object-cover" onerror="this.src='https://placehold.co/800x500/10b981/ffffff?text=Huerta+Escolar+AquaSmart'">
+
+                <!-- Imagen Destacada del Prototipo -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white p-3 rounded-3xl border border-slate-200 shadow-xl relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=800&q=80" 
+                             alt="Prototipo de Riego en Huerta" 
+                             class="w-full h-64 sm:h-80 object-cover rounded-2xl"
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x400/059669/ffffff?text=Aqua+Smart+-+CEDMR';">
+                        
+                        <div class="mt-3 p-3 bg-slate-100 rounded-xl border border-slate-200 text-[11px] text-slate-600">
+                            <div class="flex items-center justify-between font-bold text-slate-800 mb-1">
+                                <span><i class="fa-solid fa-camera mr-1 text-ecoGreen-600"></i> Registro de Montaje</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px]">Imagen Referencial</span>
+                            </div>
+                            <p class="leading-tight">
+                                Montaje del sistema de microgoteo Aqua Smart instalado sobre la estructura de palet vertical en la huerta escolar.
+                            </p>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- 3. SECCIÓN DESTACADA DE BENEFICIOS PARA EL COLEGIO -->
-    <section id="beneficios" class="py-16 bg-white">
+    <!-- 3 BENEFICIOS REALES Y AUTÉNTICOS -->
+    <section class="py-16 bg-white border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-14">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-2">Impacto Educativo e Institucional</h2>
-                <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Beneficios de AquaSmart en la Escuela</h3>
-                <p class="text-slate-600 mt-3 text-base">
-                    AquaSmart no solo optimiza el cuidado de la huerta, sino que transforma el aprendizaje escolar conectando la tecnología con la sostenibilidad.
-                </p>
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-ecoGreen-600 font-bold uppercase text-xs tracking-wider bg-ecoGreen-100 px-3 py-1 rounded-full">Principios del Proyecto</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">3 Objetivos de Impacto de Aqua Smart</h2>
+                <p class="text-sm text-slate-600 mt-2">Beneficios analizados para la huerta del CEDMR Miguela Rodríguez Araujo.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Beneficio 1 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-ecoGreen-400 transition-all">
+                    <div class="w-12 h-12 bg-ecoGreen-100 text-ecoGreen-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">1. Optimización del Agua</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        El sistema busca dosificar el agua únicamente cuando los sensores detecten resequedad en la tierra, minimizando el desperdicio directo por escorrentía o evapotranspiración excesiva.
+                    </p>
+                </div>
 
-                <!-- Beneficio 1: Conservación del Agua -->
-                <div class="bg-emerald-50/50 p-8 rounded-3xl border border-emerald-100 card-shadow hover:border-emerald-300 transition duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-emerald-200">
-                            <i class="fa-solid fa-hand-holding-droplet"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Conservación Responsable del Agua</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Aplica únicamente la cantidad exacta de agua que el suelo requiere según su estado. Evita el derroche por riego excesivo o encharcamientos, enseñando a los estudiantes el valor de un recurso vital.
+                <!-- Beneficio 2 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-ecoBlue-400 transition-all">
+                    <div class="w-12 h-12 bg-ecoBlue-100 text-ecoBlue-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">2. Autonomía en Recesos</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Procura mantener la humedad necesaria durante los fines de semana y vacaciones escolares, evitando la pérdida de plantas por falta de regado continuo.
+                    </p>
+                </div>
+
+                <!-- Beneficio 3 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-amber-400 transition-all">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-boxes-packing"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">3. Aprovechamiento de Palets</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Reutiliza estructuras de palets de madera para crear soportes verticales organizados, optimizando espacios reducidos en el patio del colegio.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEMA Y CONTEXTO PROPIO / LOCAL -->
+    <section id="contexto" class="py-16 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                <div class="lg:col-span-7 space-y-5">
+                    <span class="text-ecoBlue-600 font-extrabold uppercase text-xs tracking-wider bg-ecoBlue-100 px-3 py-1 rounded-full">Diagnóstico Institucional</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Contexto de la Huerta Escolar en el CEDMR</h2>
+                    
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        En el colegio <strong>CEDMR Miguela Rodríguez Araujo</strong> contamos con un espacio destinado a la huerta pedagógica. Durante las clases, el cuidado es atendido por los alumnos y docentes, manteniendo un cultivo constante de hortalizas.
+                    </p>
+
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl space-y-2">
+                        <h4 class="text-xs font-bold text-amber-900 uppercase">El desafío durante los recesos</h4>
+                        <p class="text-xs text-amber-800 leading-relaxed">
+                            Durante los recesos de invierno, verano y fines de semana largos, la huerta queda desatendida. Esto genera el secado de cultivos por falta de hidratación regular, perdiéndose gran parte del trabajo realizado.
                         </p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-100 flex items-center text-emerald-700 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Uso racional del agua escolar
+
+                    <div class="space-y-3 pt-2">
+                        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Continuidad e Innovación</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Tomando como antecedente los ensayos de riego manuales y los intentos de años anteriores, nuestro equipo rediseñó la propuesta centrándose en la automatización segura mediante microcontroladores, la organización vertical sobre palets y la gestión eficiente del consumo hídrico.
+                        </p>
                     </div>
                 </div>
 
-                <!-- Beneficio 2: Mantenimiento en Vacaciones -->
-                <div class="bg-blue-50/50 p-8 rounded-3xl border border-blue-100 card-shadow hover:border-blue-300 transition duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-blue-200">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Protección durante Fines de Semana y Vacaciones</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Resuelve uno de los grandes desafíos de las huertas escolares: la falta de riego durante periodos no lectivos. La huerta se mantiene hidratada y saludable sin necesidad de guardias presenciales.
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-blue-100 flex items-center text-blue-700 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Cuidado continuo durante el año
-                    </div>
-                </div>
+                <!-- Tarjeta de Diagnóstico -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200 shadow-md space-y-4">
+                    <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center justify-between">
+                        <span><i class="fa-solid fa-clipboard-list text-ecoGreen-600 mr-2"></i> Diagnóstico de Situación</span>
+                        <span class="text-[10px] bg-ecoBlue-100 text-ecoBlue-800 px-2 py-0.5 rounded font-bold">CEDMR</span>
+                    </h3>
 
-                <!-- Beneficio 3: Aprendizaje de Ciencia y Automatización -->
-                <div class="bg-teal-50/50 p-8 rounded-3xl border border-teal-100 card-shadow hover:border-teal-300 transition duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-teal-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-teal-200">
-                            <i class="fa-solid fa-flask"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Aprendizaje Práctico de Ciencia y Automatización</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Convierte conceptos teóricos de biología, física y lógica en experiencias palpables. Los estudiantes comprenden de forma directa cómo la tecnología ayuda a resolver problemas biológicos reales.
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-teal-100 flex items-center text-teal-700 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Integración STEM en el aula
-                    </div>
-                </div>
+                    <ul class="space-y-2.5 text-xs text-slate-600">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i>
+                            <span><strong>Riego manual discontinuo:</strong> Inexistencia de regado en periodos no lectivos.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-check text-ecoGreen-600 mt-0.5"></i>
+                            <span><strong>Materiales disponibles:</strong> Palets reutilizables e instalación de microgoteo listos.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-circle-notch text-ecoBlue-600 mt-0.5"></i>
+                            <span><strong>Componente pendiente:</strong> Adquisición e integración de la placa Arduino para la automatización final.</span>
+                        </li>
+                    </ul>
 
-                <!-- Beneficio 4: Trabajo en Equipo -->
-                <div class="bg-amber-50/50 p-8 rounded-3xl border border-amber-100 card-shadow hover:border-amber-300 transition duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-amber-200">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Trabajo en Equipo y Colaboración</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Promueve proyectos colaborativos entre alumnos de distintos niveles: unos supervisan el estado de la tierra, otros ajustan parámetros y todos participan en la cosecha y mantenimiento del espacio verde.
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-amber-100 flex items-center text-amber-700 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Proyectos transversales
-                    </div>
-                </div>
-
-                <!-- Beneficio 5: Conciencia Ambiental -->
-                <div class="bg-indigo-50/50 p-8 rounded-3xl border border-indigo-100 card-shadow hover:border-indigo-300 transition duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-indigo-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-indigo-200">
-                            <i class="fa-solid fa-earth-americas"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Educación para la Sostenibilidad</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Genera hábitos responsables de consumo de recursos y fomenta la sensibilidad ecológica desde edades tempranas, preparando estudiantes comprometidos con el cuidado medioambiental.
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-indigo-100 flex items-center text-indigo-700 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Compromiso ecológico real
-                    </div>
-                </div>
-
-                <!-- Beneficio 6: Mejora del Rendimiento de los Cultivos -->
-                <div class="bg-lime-50/50 p-8 rounded-3xl border border-lime-100 card-shadow hover:border-lime-300 transition duration-300 flex flex-col justify-between">
-                    <div>
-                        <div class="w-14 h-14 bg-lime-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-md shadow-lime-200">
-                            <i class="fa-solid fa-wheat-awn"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Mejor Desarrollo de los Cultivos</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Al recibir la humedad constante que necesitan sin estrés hídrico, las hortalizas y plantas educativas crecen con mayor rapidez y vigor, garantizando cosechas de éxito para las actividades del colegio.
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-lime-100 flex items-center text-lime-800 text-xs font-semibold">
-                        <i class="fa-solid fa-circle-check mr-2"></i> Resultados visibles en las plantas
+                    <div class="pt-3 border-t text-[11px] text-slate-500 italic">
+                        "Aqua Smart busca dar la solución técnica definitiva para la preservación continua de la huerta del CEDMR Miguela Rodríguez Araujo."
                     </div>
                 </div>
 
@@ -216,313 +283,538 @@
         </div>
     </section>
 
-    <!-- 4. DASHBOARD INTERACTIVO DE CONTROL EN TIEMPO REAL -->
-    <section id="dashboard" class="py-16 bg-slate-100 border-y border-slate-200">
+    <!-- OBJETIVOS DEL PROYECTO -->
+    <section id="objetivos" class="py-16 bg-white border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-2">Simulación en Vivo</h2>
-                <h3 class="text-3xl font-extrabold text-slate-900">Panel de Control de la Huerta</h3>
-                <p class="text-slate-600 mt-2">Simula condiciones del clima y observa la respuesta automática de la bomba de agua.</p>
-            </div>
-
-            <!-- Controles de Simulación de Clima -->
-            <div class="bg-white p-4 rounded-2xl mb-8 max-w-2xl mx-auto flex flex-wrap justify-center items-center gap-3 border border-slate-200 shadow-sm">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider w-full text-center sm:w-auto sm:text-left mr-2">Simular Clima:</span>
-                <button onclick="setWeather('sunny')" id="btn-sunny" class="px-4 py-2 rounded-xl text-sm font-semibold transition bg-amber-500 text-white shadow-md flex items-center gap-2">
-                    <i class="fa-solid fa-sun"></i> Sol
-                </button>
-                <button onclick="setWeather('normal')" id="btn-normal" class="px-4 py-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-200 flex items-center gap-2 border border-slate-200">
-                    <i class="fa-solid fa-cloud-sun"></i> Normal
-                </button>
-                <button onclick="setWeather('rain')" id="btn-rain" class="px-4 py-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-200 flex items-center gap-2 border border-slate-200">
-                    <i class="fa-solid fa-cloud-showers-heavy"></i> Lluvia
-                </button>
-            </div>
-
-            <!-- Tarjetas de Indicadores Visuales -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Humedad Suelo -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow relative overflow-hidden">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase">Humedad del Suelo</span>
-                            <h4 id="val-soil" class="text-3xl font-extrabold text-slate-800 mt-1">32%</h4>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-plant-wilt"></i>
-                        </div>
-                    </div>
-                    <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                        <div id="bar-soil" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 32%"></div>
-                    </div>
-                    <span id="status-soil" class="text-xs font-medium text-amber-600 mt-2 block">Tierra Seca</span>
-                </div>
-
-                <!-- Temperatura -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase">Temperatura</span>
-                            <h4 id="val-temp" class="text-3xl font-extrabold text-slate-800 mt-1">28°C</h4>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-temperature-half"></i>
-                        </div>
-                    </div>
-                    <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                        <div id="bar-temp" class="bg-rose-500 h-2.5 rounded-full transition-all duration-500" style="width: 56%"></div>
-                    </div>
-                    <span id="status-temp" class="text-xs font-medium text-slate-600 mt-2 block">Temperatura Ambiente</span>
-                </div>
-
-                <!-- Nivel del Depósito -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase">Nivel del Depósito</span>
-                            <h4 id="val-tank" class="text-3xl font-extrabold text-slate-800 mt-1">75%</h4>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-glass-water"></i>
-                        </div>
-                    </div>
-                    <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                        <div id="bar-tank" class="bg-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 75%"></div>
-                    </div>
-                    <span class="text-xs font-medium text-emerald-600 mt-2 block">Agua disponible</span>
-                </div>
-
-                <!-- Estado Bomba -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase">Bomba de Agua</span>
-                            <h4 id="val-valve" class="text-3xl font-extrabold text-emerald-600 mt-1">ENCENDIDA</h4>
-                        </div>
-                        <div id="icon-valve" class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl animate-pulse">
-                            <i class="fa-solid fa-faucet-drip"></i>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between mt-3">
-                        <span id="valve-mode" class="text-xs font-medium text-slate-500">Modo: Automático</span>
-                        <button onclick="toggleValveManual()" id="btn-valve-toggle" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition">
-                            Apagar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Panel de Estado -->
-            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div class="space-y-2 text-center md:text-left">
-                        <div class="inline-block bg-emerald-700/60 px-3 py-1 rounded-full text-xs font-semibold text-emerald-200">
-                            Estado en Tiempo Real
-                        </div>
-                        <h4 class="text-2xl font-bold">Monitoreo del Sistema</h4>
-                        <p id="system-log" class="text-emerald-100 text-sm max-w-lg">
-                            [SISTEMA]: Humedad baja (< 40%). Bomba activada para regar la huerta.
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
-                        <div class="text-right">
-                            <div class="text-xs text-emerald-200">Estado Bomba</div>
-                            <div id="pump-status-text" class="font-bold text-lg text-emerald-300">BOMBEO ACTIVO</div>
-                        </div>
-                        <div id="pump-spinner" class="w-10 h-10 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. ¿CÓMO FUNCIONA EL KIT DE RIEGO? -->
-    <section id="como-funciona" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-2">Funcionamiento Didáctico</h2>
-                <h3 class="text-3xl font-extrabold text-slate-900">¿Cómo Funciona el Kit de Riego?</h3>
-                <p class="text-slate-600 mt-2">Componentes clave que conforman el sistema automático de la huerta.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Componente 1 -->
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 card-shadow text-center">
-                    <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6">
-                        <i class="fa-solid fa-water"></i>
-                    </div>
-                    <span class="text-xs font-bold text-emerald-600 tracking-wider uppercase">Paso 1</span>
-                    <h4 class="font-bold text-slate-800 text-xl my-2">Sensor de Humedad</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Mide la humedad del suelo de la huerta en tiempo real para determinar si las plantas necesitan agua.
-                    </p>
-                </div>
-
-                <!-- Componente 2 -->
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 card-shadow text-center">
-                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6">
-                        <i class="fa-solid fa-microchip"></i>
-                    </div>
-                    <span class="text-xs font-bold text-blue-600 tracking-wider uppercase">Paso 2</span>
-                    <h4 class="font-bold text-slate-800 text-xl my-2">Controlador Central</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Procesa las lecturas del sensor y decide si activa o detiene el paso de electricidad hacia la bomba.
-                    </p>
-                </div>
-
-                <!-- Componente 3 -->
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200 card-shadow text-center">
-                    <div class="w-16 h-16 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6">
-                        <i class="fa-solid fa-pump-soap"></i>
-                    </div>
-                    <span class="text-xs font-bold text-teal-600 tracking-wider uppercase">Paso 3</span>
-                    <h4 class="font-bold text-slate-800 text-xl my-2">Bomba de Agua</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Envía el agua desde el depósito hacia los cultivos hasta alcanzar el nivel ideal de humedad en la tierra.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="bg-slate-900 text-white py-10 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white font-bold">
-                        <i class="fa-solid fa-droplet text-sm"></i>
-                    </div>
-                    <span class="text-xl font-bold">AquaSmart</span>
-                </div>
-                <p class="text-slate-400 text-sm text-center">
-                    Sistema de Riego Automático Escolar
+                <span class="text-ecoGreen-600 font-extrabold uppercase text-xs tracking-wider bg-ecoGreen-100 px-3 py-1 rounded-full">Metodología Académica</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">Objetivos del Proyecto Aqua Smart</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2">
+                    Metas orientadas al desarrollo técnico del sistema en la institución.
                 </p>
             </div>
-            <div class="border-t border-slate-800 mt-6 pt-6 text-center text-slate-500 text-xs">
-                © AquaSmart - Huerta Escolar.
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Objetivo General -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-ecoGreen-600 text-white rounded-lg text-sm"><i class="fa-solid fa-bullseye"></i></div>
+                        <h3 class="text-base font-bold text-slate-900">Objetivo General</h3>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Implementar y evaluar un sistema de riego automático controlado por una placa Arduino sobre estructuras de palet reciclados, buscando <strong>garantizar la humedad adecuada en la huerta del colegio CEDMR Miguela Rodríguez Araujo</strong> durante los períodos en que la escuela se encuentra sin actividad presencial.
+                    </p>
+                </div>
+
+                <!-- Objetivos Específicos -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-ecoBlue-600 text-white rounded-lg text-sm"><i class="fa-solid fa-list-check"></i></div>
+                        <h3 class="text-base font-bold text-slate-900">Objetivos Específicos</h3>
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-600">
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-arrow-right text-ecoGreen-600 text-[10px] mt-1"></i>
+                            <span>Programar en el Arduino la lógica de encendido/apagado basándose en las lecturas de los sensores.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-arrow-right text-ecoGreen-600 text-[10px] mt-1"></i>
+                            <span>Integrar el circuito eléctrico de 12V con cajas de aislamiento hermético para evitar riesgos con el agua.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i class="fa-solid fa-arrow-right text-ecoGreen-600 text-[10px] mt-1"></i>
+                            <span>Verificar la reducción estimada en el consumo hídrico respecto al riego por manguera manual.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIMULADOR DIDÁCTICO -->
+    <section id="simulador" class="py-16 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <!-- Rotulado explícito -->
+                <div class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/40 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-flask mr-1.5"></i> Simulador Didáctico – Datos de Ejemplo (Demostración del Algoritmo)
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Demostrador Lógico del Sistema Aqua Smart</h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-2">
+                    Simulación interactiva que recrea la lógica de control que ejecutará la placa Arduino al recibir lecturas del sensor en la huerta.
+                </p>
+            </div>
+
+            <!-- Dashboard del Simulador -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-slate-950 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl">
+                
+                <!-- Controles -->
+                <div class="lg:col-span-5 space-y-6 border-b lg:border-b-0 lg:border-r border-slate-800 pb-6 lg:pb-0 lg:pr-6">
+                    <h3 class="text-base font-bold text-ecoGreen-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-sliders"></i> Controles de Prueba
+                    </h3>
+
+                    <!-- Slider de Humedad -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Humedad Simulada:</span>
+                            <span id="simSoilVal" class="font-mono font-bold text-ecoBlue-400">30% (Suelo Seco)</span>
+                        </div>
+                        <input type="range" id="simSlider" min="10" max="90" value="30" oninput="manualSliderChange(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-ecoBlue-500">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>10% (Muy Seco)</span>
+                            <span>50% (Umbral)</span>
+                            <span>90% (Saturado)</span>
+                        </div>
+                    </div>
+
+                    <!-- Selector Umbral -->
+                    <div class="space-y-2">
+                        <label class="text-xs text-slate-400 block">Umbral de Activación (Arduino):</label>
+                        <select id="simThreshold" onchange="checkSimLogic()" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-xl p-2.5 focus:outline-none">
+                            <option value="40">Humedad menor a 40% (Hortalizas)</option>
+                            <option value="55" selected>Humedad menor a 55% (Plántulas sensibles)</option>
+                            <option value="30">Humedad menor a 30% (Plantas de poco riego)</option>
+                        </select>
+                    </div>
+
+                    <!-- Botón Manual -->
+                    <button id="simPumpBtn" onclick="toggleSimPumpManual()" class="w-full py-3 bg-ecoBlue-600 hover:bg-ecoBlue-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-power-off"></i>
+                        <span id="simPumpBtnText">Forzado Manual de Bomba (Simulado)</span>
+                    </button>
+
+                    <div class="text-[11px] text-slate-500 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                        <i class="fa-solid fa-microchip text-amber-400 mr-1"></i>
+                        <span>En la instalación real, la placa Arduino leerá las entradas analógicas y conmutará el relé de la bomba automáticamente.</span>
+                    </div>
+                </div>
+
+                <!-- Visualización Gráfica -->
+                <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+                    
+                    <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 relative min-h-[220px] flex flex-col justify-between">
+                        
+                        <!-- Barra de Estado -->
+                        <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <span id="simStatusDot" class="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
+                                <span id="simStatusText" class="font-mono text-slate-400">Bomba Aqua Smart: APAGADA</span>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-mono">Modo Demo</span>
+                        </div>
+
+                        <!-- Render de Goteo y Palet -->
+                        <div class="my-4 relative">
+                            <!-- Tubería -->
+                            <div class="w-full h-2.5 bg-slate-800 rounded-full border border-slate-700 relative overflow-hidden">
+                                <div id="simWaterPipe" class="absolute inset-0 bg-ecoBlue-500 opacity-0 transition-opacity duration-300"></div>
+                            </div>
+
+                            <!-- Gotas -->
+                            <div id="simDripContainer" class="h-8 flex justify-around px-6 opacity-0 transition-opacity duration-300">
+                                <i class="fa-solid fa-droplet text-ecoBlue-400 text-xs animate-drip"></i>
+                                <i class="fa-solid fa-droplet text-ecoBlue-400 text-xs animate-drip" style="animation-delay: 0.3s;"></i>
+                                <i class="fa-solid fa-droplet text-ecoBlue-400 text-xs animate-drip" style="animation-delay: 0.6s;"></i>
+                            </div>
+
+                            <!-- Módulo Palet -->
+                            <div id="simPalletSoil" class="soil-dry rounded-xl p-4 border-2 border-amber-900/60 transition-all">
+                                <div class="grid grid-cols-3 gap-2 text-center">
+                                    <div class="bg-black/50 p-2 rounded-lg border border-amber-900/40">
+                                        <i id="simPlant1" class="fa-solid fa-seedling text-2xl text-amber-600"></i>
+                                        <span class="block text-[10px] text-slate-400 mt-1">Planta A</span>
+                                    </div>
+                                    <div class="bg-black/50 p-2 rounded-lg border border-amber-900/40">
+                                        <i id="simPlant2" class="fa-solid fa-seedling text-2xl text-amber-600"></i>
+                                        <span class="block text-[10px] text-slate-400 mt-1">Planta B</span>
+                                    </div>
+                                    <div class="bg-black/50 p-2 rounded-lg border border-amber-900/40">
+                                        <i id="simPlant3" class="fa-solid fa-seedling text-2xl text-amber-600"></i>
+                                        <span class="block text-[10px] text-slate-400 mt-1">Planta C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Barra Nivel -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-mono text-slate-400">
+                                <span>Nivel de Humedad del Sustrato</span>
+                                <span id="simSoilPctText">30%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div id="simProgressBar" class="bg-ecoBlue-500 h-full w-[30%] transition-all duration-300"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Métricas Estimadas -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center text-xs">
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <span class="text-slate-500 block text-[10px] uppercase">Estado Lógico</span>
+                            <span id="simMetricState" class="font-bold text-amber-400 font-mono">Suelo Seco</span>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <span class="text-slate-500 block text-[10px] uppercase">Flujo Estimado</span>
+                            <span id="simMetricTime" class="font-bold text-ecoBlue-400 font-mono">150 ml / min</span>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 col-span-2 sm:col-span-1">
+                            <span class="text-slate-500 block text-[10px] uppercase">Alimentación</span>
+                            <span class="font-bold text-ecoGreen-400 font-mono">12V DC / Arduino</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PRESUPUESTO ESTIMADO Y SEGURIDAD -->
+    <section id="viabilidad" class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-ecoGreen-600 font-extrabold uppercase text-xs tracking-wider bg-ecoGreen-100 px-3 py-1 rounded-full">Análisis de Recursos</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">Presupuesto Pendiente & Medidas de Seguridad</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2">
+                    Detalle del único componente faltante para concretar la puesta en marcha de Aqua Smart.
+                </p>
+            </div>
+
+            <!-- TABLA DE PRESUPUESTO ACTUALIZADA (SOLO ARDUINO - 3.000.000 Gs.) -->
+            <div class="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="p-4 bg-slate-100 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-2">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center">
+                        <i class="fa-solid fa-microchip text-ecoGreen-600 mr-2"></i> Componente Requerido para Finalizar el Proyecto
+                    </h3>
+                    <span class="text-xs font-mono font-bold bg-ecoGreen-600 text-white px-3 py-1 rounded-lg shadow-sm">
+                        Presupuesto Restante: 3.000.000 Gs.
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-200/60 text-slate-700 uppercase font-bold text-[10px]">
+                            <tr>
+                                <th class="p-4">Componente Faltante</th>
+                                <th class="p-4">Función en el Sistema</th>
+                                <th class="p-4">Fuente de Energía</th>
+                                <th class="p-4 text-right">Costo Estimado (Paraguay)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 font-medium bg-white">
+                            <tr>
+                                <td class="p-4 font-bold text-slate-900 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    Placa Controladora Arduino (Kit de Control)
+                                </td>
+                                <td class="p-4">
+                                    Procesar las señales analógicas de los sensores de humedad, ejecutar la lógica de riego y accionar la bomba mediante relé.
+                                </td>
+                                <td class="p-4">Alimentación USB / Fuente 5V-12V DC</td>
+                                <td class="p-4 text-right font-mono font-bold text-ecoGreen-700 text-sm">3.000.000 Gs.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-4 bg-slate-100 border-t border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+                    <span><i class="fa-solid fa-circle-check text-ecoGreen-600 mr-1.5"></i> <strong>Nota:</strong> Los demás elementos (palets, mangueras de goteo, sensores y depósito de agua) ya han sido reunidos y acondicionados.</span>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DE SEGURIDAD AGUA/ELECTRICIDAD -->
+            <div class="bg-red-50 border border-red-200 rounded-2xl p-6 space-y-4">
+                <div class="flex items-center space-x-3 text-red-800">
+                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    <h3 class="text-base font-bold">Protocolo de Seguridad Agua / Electricidad</h3>
+                </div>
+                <p class="text-xs text-red-900 leading-relaxed">
+                    Al operar un sistema que combina almacenamiento hídrico e instalación eléctrica en la huerta del CEDMR Miguela Rodríguez Araujo, el equipo adoptó las siguientes pautas de seguridad:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+                    <div class="bg-white p-3.5 rounded-xl border border-red-200">
+                        <span class="font-bold text-slate-900 block mb-1">1. Voltaje Seguro (12V DC)</span>
+                        <span>Toda la etapa de bombeo e indicadores operará bajo voltaje bajo de corriente continua (12V), evitando conexiones directas de 220V en la tierra.</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-red-200">
+                        <span class="font-bold text-slate-900 block mb-1">2. Gabinete Plástico Estanco</span>
+                        <span>La placa Arduino y la placa de relés estarán contenidas dentro de una caja sellada aislada contra humedad y lluvia directas.</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-red-200">
+                        <span class="font-bold text-slate-900 block mb-1">3. Aislamiento por Relé</span>
+                        <span>Aislamiento físico completo entre la línea de control de señal de bajo amperaje del Arduino y el circuito de potencia de la bomba.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CRONOGRAMA POR ETAPAS Y BITÁCORA -->
+    <section id="bitacora" class="py-16 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-ecoBlue-600 font-extrabold uppercase text-xs tracking-wider bg-ecoBlue-100 px-3 py-1 rounded-full">Planificación del Proyecto</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">Etapas Anuales y Bitácora de Trabajo</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2">
+                    Evolución del proyecto Aqua Smart y registro detallado de las actividades realizadas en la Etapa 1.
+                </p>
+            </div>
+
+            <!-- ETAPAS POR AÑO -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-2xl border-t-4 border-ecoGreen-600 border-x border-b border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-bold uppercase text-ecoGreen-600 bg-ecoGreen-50 px-2 py-0.5 rounded">Etapa 1 (Actual)</span>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">Acondicionamiento y Programación</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        Armado de la estructura de palets, tendido del sistema de goteo, desarrollo de la simulación lógica y adquisición del Arduino.
+                    </p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border-t-4 border-ecoBlue-600 border-x border-b border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-bold uppercase text-ecoBlue-600 bg-ecoBlue-50 px-2 py-0.5 rounded">Etapa 2</span>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">Instalación Física en la Huerta</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        Conexión final de la placa Arduino en el gabinete estanco de la huerta escolar e integración del tanque de reserva de agua.
+                    </p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border-t-4 border-purple-600 border-x border-b border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-bold uppercase text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Etapa 3</span>
+                    <h3 class="text-base font-bold text-slate-900 mt-2">Evaluación y Optimización</h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        Medición de niveles de humedad durante el receso vacacional y calibración de los tiempos de apertura del riego automático.
+                    </p>
+                </div>
+            </div>
+
+            <!-- BITÁCORA CON FECHAS CONCRETAS DE ETAPA 1 -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-ecoGreen-600"></i>
+                    Bitácora de Trabajo de Aqua Smart (Etapa 1 - CEDMR)
+                </h3>
+
+                <div class="relative border-l-2 border-slate-200 ml-3 space-y-6 text-xs text-slate-600">
+                    
+                    <div class="ml-6 relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-ecoGreen-600 border-2 border-white"></span>
+                        <div class="font-bold text-slate-900">10 de Abril - Evaluación del Área de la Huerta</div>
+                        <p class="mt-1">
+                            El equipo realizó la inspección inicial de las parcelas de la huerta del CEDMR. Se acordó la utilización de palets reciclados para estructurar un riego vertical que ahorre espacio.
+                        </p>
+                    </div>
+
+                    <div class="ml-6 relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-ecoGreen-600 border-2 border-white"></span>
+                        <div class="font-bold text-slate-900">22 de Mayo - Acondicionamiento de Estructuras</div>
+                        <p class="mt-1">
+                            Lijado y aplicación de sellador en la madera de los palets para protegerlos de la intemperie. Montaje del tendido de micromangueras de goteo.
+                        </p>
+                    </div>
+
+                    <div class="ml-6 relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-ecoGreen-600 border-2 border-white"></span>
+                        <div class="font-bold text-slate-900">14 de Julio - Desarrollo Lógico y Simulación</div>
+                        <p class="mt-1">
+                            Diseño del esquema de programación del microcontrolador y creación del simulador virtual para testear las lecturas analógicas de humedad del suelo.
+                        </p>
+                    </div>
+
+                    <div class="ml-6 relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-ecoGreen-600 border-2 border-white"></span>
+                        <div class="font-bold text-slate-900">18 de Agosto - Cotización y Definición del Presupuesto</div>
+                        <p class="mt-1">
+                            Verificación de componentes acopiados. Se identificó la placa Arduino como el último elemento restante, fijando un presupuesto estimado de 3.000.000 Gs. para su adquisición e integración final.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- EQUIPO DE DESARROLLO ACTUALIZADO -->
+    <section id="equipo" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-ecoGreen-600 font-extrabold uppercase text-xs tracking-wider bg-ecoGreen-100 px-3 py-1 rounded-full">Alumnos Responsables</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">Equipo de Desarrollo Aqua Smart</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-2">
+                    Estudiantes a cargo de la ejecución del proyecto de riego automático.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <!-- Integrante 1: Mateo Arce -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm hover:border-ecoGreen-400 transition-all">
+                    <div class="w-16 h-16 bg-ecoGreen-600 text-white font-extrabold rounded-full flex items-center justify-center mx-auto text-xl shadow">
+                        MA
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Mateo Arce</h3>
+                        <span class="text-[11px] font-semibold text-ecoGreen-600 block mt-0.5">Programación & Lógica Arduino</span>
+                        <p class="text-[10px] text-slate-500 mt-1">Encargado del algoritmo de control, lectura de sensores y código del sistema.</p>
+                    </div>
+                </div>
+
+                <!-- Integrante 2: Cesar Pereira -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm hover:border-ecoBlue-400 transition-all">
+                    <div class="w-16 h-16 bg-ecoBlue-600 text-white font-extrabold rounded-full flex items-center justify-center mx-auto text-xl shadow">
+                        CP
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">César Pereira</h3>
+                        <span class="text-[11px] font-semibold text-ecoBlue-600 block mt-0.5">Electrónica & Conexiones 12V</span>
+                        <p class="text-[10px] text-slate-500 mt-1">Responsable del armado de la caja estanca, relés y circuito eléctrico de seguridad.</p>
+                    </div>
+                </div>
+
+                <!-- Integrante 3: Fabian Martinez -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-3 shadow-sm hover:border-amber-400 transition-all">
+                    <div class="w-16 h-16 bg-amber-600 text-white font-extrabold rounded-full flex items-center justify-center mx-auto text-xl shadow">
+                        FM
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Fabián Martínez</h3>
+                        <span class="text-[11px] font-semibold text-amber-700 block mt-0.5">Montaje en Palets & Hidráulica</span>
+                        <p class="text-[10px] text-slate-500 mt-1">Coordinador del reacondicionamiento de los palets y tendido del riego por goteo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ficha Institucional -->
+            <div class="mt-10 bg-slate-100 p-4 rounded-xl border border-slate-200 text-center text-xs text-slate-600 max-w-2xl mx-auto">
+                <i class="fa-solid fa-school text-ecoGreen-600 mr-1.5"></i>
+                <span><strong>Institución Educativa:</strong> CEDMR Miguela Rodríguez Araujo</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="bg-slate-950 text-slate-400 py-10 text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <div class="flex items-center justify-center space-x-2 text-white font-bold text-base">
+                <i class="fa-solid fa-droplet text-ecoGreen-500"></i>
+                <span>Aqua Smart - CEDMR Miguela Rodríguez Araujo</span>
+            </div>
+            <p class="max-w-xl mx-auto text-slate-500 text-[11px] leading-relaxed">
+                Proyecto escolar para la automatización e irrigación sostenible de la huerta del colegio mediante estructuras de palet reciclados y microcontrolador Arduino.
+            </p>
+            <div class="text-[10px] text-slate-600">
+                &copy; Presentación de Proyecto Escolar | CEDMR Miguela Rodríguez Araujo
             </div>
         </div>
     </footer>
 
-    <!-- LÓGICA DEL DASHBOARD -->
+    <!-- LÓGICA JAVASCRIPT DEL SIMULADOR DIDÁCTICO -->
     <script>
-        let soilMoisture = 32;
-        let temperature = 28;
-        let tankLevel = 75;
-        let isValveManual = false;
-        let isValveOn = true;
+        // ESTADO DEL SIMULADOR DIDÁCTICO (DATOS DE EJEMPLO)
+        let simSoilVal = 30;
+        let isSimPumpOn = false;
 
-        const valSoil = document.getElementById('val-soil');
-        const barSoil = document.getElementById('bar-soil');
-        const statusSoil = document.getElementById('status-soil');
-
-        const valTemp = document.getElementById('val-temp');
-        const barTemp = document.getElementById('bar-temp');
-
-        const valTank = document.getElementById('val-tank');
-        const barTank = document.getElementById('bar-tank');
-
-        const valValve = document.getElementById('val-valve');
-        const iconValve = document.getElementById('icon-valve');
-        const valveMode = document.getElementById('valve-mode');
-        const btnValveToggle = document.getElementById('btn-valve-toggle');
-
-        const systemLog = document.getElementById('system-log');
-        const pumpStatusText = document.getElementById('pump-status-text');
-        const pumpSpinner = document.getElementById('pump-spinner');
-
-        function setWeather(type) {
-            document.getElementById('btn-sunny').className = "px-4 py-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-200 flex items-center gap-2 border border-slate-200";
-            document.getElementById('btn-normal').className = "px-4 py-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-200 flex items-center gap-2 border border-slate-200";
-            document.getElementById('btn-rain').className = "px-4 py-2 rounded-xl text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-200 flex items-center gap-2 border border-slate-200";
-
-            if (type === 'sunny') {
-                document.getElementById('btn-sunny').className = "px-4 py-2 rounded-xl text-sm font-semibold transition bg-amber-500 text-white shadow-md flex items-center gap-2";
-                soilMoisture = 25;
-                temperature = 33;
-                tankLevel = 60;
-            } else if (type === 'normal') {
-                document.getElementById('btn-normal').className = "px-4 py-2 rounded-xl text-sm font-semibold transition bg-emerald-600 text-white shadow-md flex items-center gap-2";
-                soilMoisture = 55;
-                temperature = 22;
-                tankLevel = 80;
-            } else if (type === 'rain') {
-                document.getElementById('btn-rain').className = "px-4 py-2 rounded-xl text-sm font-semibold transition bg-blue-600 text-white shadow-md flex items-center gap-2";
-                soilMoisture = 85;
-                temperature = 18;
-                tankLevel = 100;
-            }
-            updateDashboard();
+        function manualSliderChange(val) {
+            simSoilVal = parseInt(val);
+            updateSimInterface();
+            checkSimLogic();
         }
 
-        function toggleValveManual() {
-            isValveManual = !isValveManual;
-            if (isValveManual) {
-                isValveOn = !isValveOn;
-                btnValveToggle.innerText = isValveOn ? "Apagar" : "Encender";
-            } else {
-                btnValveToggle.innerText = "Apagar";
+        function checkSimLogic() {
+            const threshold = parseInt(document.getElementById('simThreshold').value);
+            
+            // Simulación de respuesta lógica de la placa Arduino
+            if (simSoilVal < threshold && !isSimPumpOn) {
+                setSimPumpState(true);
+            } else if (simSoilVal >= threshold + 15 && isSimPumpOn) {
+                setSimPumpState(false);
             }
-            updateDashboard();
         }
 
-        function updateDashboard() {
-            if (!isValveManual) {
-                isValveOn = soilMoisture < 45;
-            }
-
-            valSoil.innerText = soilMoisture + "%";
-            barSoil.style.width = soilMoisture + "%";
-            if (soilMoisture < 40) {
-                statusSoil.innerText = "Tierra Seca";
-                statusSoil.className = "text-xs font-medium text-amber-600 mt-2 block";
-                barSoil.className = "bg-amber-500 h-2.5 rounded-full transition-all duration-500";
-            } else if (soilMoisture <= 70) {
-                statusSoil.innerText = "Humedad Óptima";
-                statusSoil.className = "text-xs font-medium text-emerald-600 mt-2 block";
-                barSoil.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-500";
-            } else {
-                statusSoil.innerText = "Suelo Húmedo";
-                statusSoil.className = "text-xs font-medium text-blue-600 mt-2 block";
-                barSoil.className = "bg-blue-500 h-2.5 rounded-full transition-all duration-500";
-            }
-
-            valTemp.innerText = temperature + "°C";
-            barTemp.style.width = (temperature * 2) + "%";
-
-            valTank.innerText = tankLevel + "%";
-            barTank.style.width = tankLevel + "%";
-
-            if (isValveOn) {
-                valValve.innerText = "ENCENDIDA";
-                valValve.className = "text-3xl font-extrabold text-emerald-600 mt-1";
-                iconValve.className = "w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl animate-pulse";
-                pumpStatusText.innerText = "BOMBEO ACTIVO";
-                pumpStatusText.className = "font-bold text-lg text-emerald-300";
-                pumpSpinner.style.display = "block";
-
-                systemLog.innerText = isValveManual ? 
-                    "[MODO MANUAL]: Bomba activada manualmente." :
-                    `[SISTEMA AUTOMÁTICO]: Humedad baja (${soilMoisture}%). Bomba activada para regar la huerta.`;
-            } else {
-                valValve.innerText = "APAGADA";
-                valValve.className = "text-3xl font-extrabold text-slate-400 mt-1";
-                iconValve.className = "w-12 h-12 rounded-xl bg-slate-200 text-slate-500 flex items-center justify-center text-xl";
-                pumpStatusText.innerText = "SISTEMA EN ESPERA";
-                pumpStatusText.className = "font-bold text-lg text-slate-400";
-                pumpSpinner.style.display = "none";
-
-                systemLog.innerText = isValveManual ? 
-                    "[MODO MANUAL]: Bomba apagada manualmente." :
-                    `[SISTEMA AUTOMÁTICO]: Humedad adecuada (${soilMoisture}%). Bomba en reposo.`;
-            }
-
-            valveMode.innerText = isValveManual ? "Modo: Manual" : "Modo: Automático";
+        function toggleSimPumpManual() {
+            setSimPumpState(!isSimPumpOn);
         }
 
+        function setSimPumpState(active) {
+            isSimPumpOn = active;
+            const pipe = document.getElementById('simWaterPipe');
+            const drip = document.getElementById('simDripContainer');
+            const dot = document.getElementById('simStatusDot');
+            const statusText = document.getElementById('simStatusText');
+            const btnText = document.getElementById('simPumpBtnText');
+
+            if (isSimPumpOn) {
+                pipe.classList.remove('opacity-0');
+                drip.classList.remove('opacity-0');
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-ecoBlue-400 animate-ping';
+                statusText.innerText = 'Bomba Aqua Smart: ENCENDIDA (Bombeando 12V)';
+                statusText.className = 'font-mono text-ecoBlue-400 font-bold';
+                btnText.innerText = 'Detener Bomba (Forzado)';
+            } else {
+                pipe.classList.add('opacity-0');
+                drip.classList.add('opacity-0');
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-slate-600';
+                statusText.innerText = 'Bomba Aqua Smart: APAGADA';
+                statusText.className = 'font-mono text-slate-400';
+                btnText.innerText = 'Forzado Manual de Bomba (Simulado)';
+            }
+        }
+
+        function updateSimInterface() {
+            document.getElementById('simSoilVal').innerText = simSoilVal + '% (' + (simSoilVal < 40 ? 'Seco' : simSoilVal > 70 ? 'Muy Húmedo' : 'Óptimo') + ')';
+            document.getElementById('simSoilPctText').innerText = simSoilVal + '%';
+            document.getElementById('simProgressBar').style.width = simSoilVal + '%';
+
+            const soil = document.getElementById('simPalletSoil');
+            const plant1 = document.getElementById('simPlant1');
+            const plant2 = document.getElementById('simPlant2');
+            const plant3 = document.getElementById('simPlant3');
+
+            if (simSoilVal > 45) {
+                soil.className = 'soil-wet rounded-xl p-4 border-2 border-amber-900/60 transition-all';
+                plant1.className = 'fa-solid fa-seedling text-2xl text-ecoGreen-400';
+                plant2.className = 'fa-solid fa-seedling text-2xl text-ecoGreen-400';
+                plant3.className = 'fa-solid fa-seedling text-2xl text-ecoGreen-400';
+                document.getElementById('simMetricState').innerText = 'Humedad Óptima';
+                document.getElementById('simMetricState').className = 'font-bold text-ecoGreen-400 font-mono';
+            } else {
+                soil.className = 'soil-dry rounded-xl p-4 border-2 border-amber-900/60 transition-all';
+                plant1.className = 'fa-solid fa-seedling text-2xl text-amber-600';
+                plant2.className = 'fa-solid fa-seedling text-2xl text-amber-600';
+                plant3.className = 'fa-solid fa-seedling text-2xl text-amber-600';
+                document.getElementById('simMetricState').innerText = 'Suelo Seco';
+                document.getElementById('simMetricState').className = 'font-bold text-amber-400 font-mono';
+            }
+        }
+
+        // Bucle de simulación en vivo
+        function startSimLoop() {
+            setInterval(() => {
+                if (isSimPumpOn) {
+                    if (simSoilVal < 90) simSoilVal += 2;
+                } else {
+                    if (simSoilVal > 15) simSoilVal -= 0.3;
+                }
+                
+                document.getElementById('simSlider').value = simSoilVal;
+                updateSimInterface();
+                checkSimLogic();
+            }, 1200);
+        }
+
+        // Menú Móvil Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Inicialización
         window.onload = function() {
-            updateDashboard();
+            startSimLoop();
+            updateSimInterface();
         };
     </script>
 </body>
